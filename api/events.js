@@ -4,6 +4,7 @@ module.exports = {
     getEvents: (req, res) => {
         query("SELECT * FROM events")
         .then(events => {
+            console.log(JSON.stringify(events))
             res.json({success: true, data: events});
         })
         .catch(err => {
@@ -14,7 +15,7 @@ module.exports = {
     getAttendees: (req, res) => {
         query("SELECT * FROM attendees WHERE event_id = " + req.params.id)
         .then(attendees => {
-            res.json({success: true, data: attendees});
+            res.json({success: true, data: JSON.stringify(attendees)});
         })
         .catch(err => {
             res.json({success: false, data: err});
