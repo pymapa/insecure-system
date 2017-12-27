@@ -2,8 +2,13 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const path = require('path');
+const morgan = require('morgan');
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// use morgan to log requests to the console
+app.use(morgan('dev'));
 
 // Load environment variables from ./.env
 require('dotenv').config();
