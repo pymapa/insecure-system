@@ -19,7 +19,10 @@ module.exports = {
                     success: true,
                     message: 'Enjoy your token!',
                     token: token,
-                    user: data
+                    user: {
+                        name: data[0].name,
+                        role: data[0].role_id
+                    }
                 });
             }
         })

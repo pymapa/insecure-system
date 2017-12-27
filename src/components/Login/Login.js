@@ -24,13 +24,15 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        // this.setState({signInState: STATE_SENT});
+        this.setState({signInState: STATE_SENT});
         axios.post('/api/login', {
             username: this.state.user.username,
             password: this.state.user.password
         })
         .then(res => {
+            console.log(res);
             sessionStorage.setItem('JWT', res.data.token);
+            sessionStorage.setItem('user', JSON.stringify(res.data.user));
             window.location.replace("/admin");
         })
         .catch(err => {
@@ -43,6 +45,12 @@ class Login extends Component {
         let _user = this.state.user;
         _user[e.target.name] = e.target.value
         this.setState({user: _user});
+    }
+
+    componentDidMount() {
+        if(sessionStorage.getItem('JWT')) {
+            window.location.replace('/admin');
+        }
     }
 
     render () {

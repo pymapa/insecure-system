@@ -40,7 +40,10 @@ class Admin extends Component {
     }
 
     componentDidMount() {
-        this.setState({user: sessionStorage.getItem('JWT')});
+        if(!sessionStorage.getItem('JWT')) {
+            window.location.replace('/login');
+        }
+        this.setState({user: sessionStorage.getItem('user')});
         axios.get('/api/events')
         .then(res => {
             this.setState({events: res.data.data});

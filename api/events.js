@@ -13,7 +13,7 @@ module.exports = {
     },
 
     getOne: (req, res) => {
-        query("SELECT events.name as name, events.date as date, event_info.into_text as info FROM events LEFT JOIN event_info ON events.id = event_info.event_id WHERE events.id = " + req.params.id)
+        query("SELECT events.id as id, events.name as name, events.date as date, event_info.into_text as info FROM events LEFT JOIN event_info ON events.id = event_info.event_id WHERE events.id = " + req.params.id)
         .then(_data => {
             console.log(_data)
             res.json({success: true, data: _data[0]})
@@ -52,6 +52,7 @@ module.exports = {
             res.json({success: true, data: _data})
         })
         .catch(err => {
+            console.log(err)
             res.json({success: false, data: err});
         })
     }

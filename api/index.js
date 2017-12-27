@@ -8,7 +8,7 @@ router.get('/events', events.getAll);
 router.get('/events/:id', events.getOne);
 router.put('/event', events.newEvent);
 router.get('/attendees/:id', events.getAttendees);
-router.post('/attend', events.attend);
+router.put('/attend', events.attend);
 
 
 router.post('/login', user.login);
