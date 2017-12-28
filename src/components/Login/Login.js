@@ -5,7 +5,6 @@ import {LoginForm} from './LoginForm';
 
 const STATE_INPUT = 1;
 const STATE_SENT = 2;
-const STATE_READY = 3;
 
 class Login extends Component {
     constructor(props) {

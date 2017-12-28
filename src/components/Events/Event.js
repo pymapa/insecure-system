@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import {EventInfo} from './EventInfo';
 import {JoinForm} from './JoinForm';
+import Admincontrols from './Admincontrols';
 
 class Event extends Component {
     constructor(props){
@@ -14,11 +15,27 @@ class Event extends Component {
                 fname: "",
                 lnaem: "",
                 age: "0"
-            }
+            },
+            isOrganizer: false
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        // Check user privileges
+        if(sessionStorage.getItem('JWT')) {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            if(user.role > 2) {
+                this.setState({isOrganizer: true})
+            }
+        }
+        // Get event data
+        axios.get("/api/events/" + this.props.match.params.id)
+        .then(res => {
+            this.setState({event: res.data.data});
+        })
     }
 
     handleSubmit(e) {
@@ -43,13 +60,6 @@ class Event extends Component {
         this.setState({person: _person});
     }
 
-    componentDidMount() {
-        axios.get("/api/events/" + this.props.match.params.id)
-        .then(res => {
-            console.log(res.data.data);
-            this.setState({event: res.data.data});
-        })
-    }
     render () {
         return (
             <div className="container">
@@ -66,6 +76,8 @@ class Event extends Component {
                         <JoinForm handleChange={this.handleChange} handleSubmit={this.handleSubmit} person={this.state.person} />
                     </div>
                 </div>
+                
+                {this.state.isOrganizer ? <Admincontrols eventId={this.props.match.params.id} event={this.state.event} /> : ""}
                 
             </div>
         )

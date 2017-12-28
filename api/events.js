@@ -15,7 +15,6 @@ module.exports = {
     getOne: (req, res) => {
         query("SELECT events.id as id, events.name as name, events.date as date, event_info.into_text as info FROM events LEFT JOIN event_info ON events.id = event_info.event_id WHERE events.id = " + req.params.id)
         .then(_data => {
-            console.log(_data)
             res.json({success: true, data: _data[0]})
         })
         .catch(err => {
@@ -28,7 +27,6 @@ module.exports = {
         query("INSERT INTO events (name, date) VALUES ('" + req.body.name + "', '" + sqlDate + "')")
         .then(data => {
             res.json({success: true, data: data})
-            console.log(data)
         })
         .catch(err => {
             res.json({success: false, data: err})
@@ -37,9 +35,9 @@ module.exports = {
     },
 
     getAttendees: (req, res) => {
-        query("´SELECT * FROM attendees WHERE event_id = ´" + req.params.id)
+        query("SELECT * FROM attendees WHERE event_id = " + req.params.id)
         .then(attendees => {
-            res.json({success: true, data: JSON.stringify(attendees)});
+            res.json({success: true, data: attendees});
         })
         .catch(err => {
             res.json({success: false, data: err});

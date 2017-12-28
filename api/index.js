@@ -7,6 +7,7 @@ const router = require('express').Router();
 router.get('/events', events.getAll);
 router.get('/events/:id', events.getOne);
 router.put('/event', events.newEvent);
+
 router.get('/attendees/:id', events.getAttendees);
 router.put('/attend', events.attend);
 
