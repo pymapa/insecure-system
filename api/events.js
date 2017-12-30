@@ -13,7 +13,7 @@ module.exports = {
     },
 
     getOne: (req, res) => {
-        query("SELECT events.id as id, events.name as name, events.date as date, event_info.into_text as info FROM events LEFT JOIN event_info ON events.id = event_info.event_id WHERE events.id = " + req.params.id)
+        query("SELECT events.id as id, events.name as name, events.date as date, event_info.info_text as info FROM events LEFT JOIN event_info ON events.id = event_info.event_id WHERE events.id = " + req.params.id)
         .then(_data => {
             res.json({success: true, data: _data[0]})
         })
@@ -31,6 +31,26 @@ module.exports = {
         .catch(err => {
             res.json({success: false, data: err})
             console.log(err)
+        })
+    },
+
+    // delete: (req, res) => {
+    //     const s = "DELETE FROM events WHERE id = " + req.params.id;
+    //     query(s)
+    //     .then(data => {
+
+    //     })
+    // },
+
+    saveInfo: (req, res) => {
+        const s = "INSERT INTO event_info(info_text, event_id) VALUES ('" + req.body.info + "', " + req.body.eventId + ") ON DUPLICATE KEY UPDATE info_text = '" + req.body.info + "'";
+        query(s)
+        .then(data => {
+            res.json({success: true});
+        })
+        .catch(err => {
+            console.log(err)
+            res.json({success: false});
         })
     },
 

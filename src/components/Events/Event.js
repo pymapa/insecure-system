@@ -47,6 +47,8 @@ class Event extends Component {
             eventId: this.state.event.id
         })
         .then(res => {
+            alert("Thank you for attending!")
+            window.location.reload();
             console.log(res)
         })
         .catch(err => {

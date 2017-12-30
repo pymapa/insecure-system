@@ -3,7 +3,6 @@ var jwt = require('jsonwebtoken');
 
 module.exports = {
     login: (req, res) => {
-        console.log(req.body);
         query("SELECT * FROM users LEFT JOIN roles ON users.role_id = roles.id WHERE users.name = '" + req.body.username + "'")
         .then(data => {
             if(data.length<1) 
@@ -31,4 +30,38 @@ module.exports = {
             res.json({success: false, data: err});
         })
     },
+
+    authenticate: (req, res) => {
+        if(checkToken(req)) {
+            res.json({success: true})
+        } else {
+            res.json({success: false});
+        }
+    },
+
+    authenticateAndNext: (req, res, next) => {
+        if(checkToken(req)) {
+            next();
+        } else {
+            res.json({success: false, data: "Unauthorized"})
+        }
+    },
+}
+
+const checkToken = (req) => {
+    const token = req.headers['x-access-token'];
+    let isValid = false;
+    if(token) {
+        jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+            if (err) {
+                isValid = false;
+            } else {
+                req.decoded = decoded;  
+                isValid = true;  
+            }
+        })
+    } else {
+        isValid = false;
+    }
+    return isValid;
 }
