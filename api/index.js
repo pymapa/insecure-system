@@ -16,6 +16,8 @@ router.get('/attendees/:id', events.getAttendees);
 router.put('/attend', events.attend);
 
 
+router.get('/admin/users', user.getAll);
+
 router.post('/login', user.login);
 
 module.exports = router;

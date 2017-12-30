@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import {EventList} from '../Events/EventList';
 import { NewEvent } from './NewEvent';
+import {UsersList} from './UsersList'
 
 class Admin extends Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class Admin extends Component {
                 name: "",
                 date: ""
             },
-            user: {}
+            user: {},
+            users: []
         }
         this.handleEventChange = this.handleEventChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,7 +45,16 @@ class Admin extends Component {
         if(!sessionStorage.getItem('JWT')) {
             window.location.replace('/login');
         }
-        this.setState({user: sessionStorage.getItem('user')});
+        this.setState({user: JSON.parse(sessionStorage.getItem('user'))});
+        axios({
+            method: 'get',
+            url: '/api/admin/users',
+            headers: {
+                'x-access-token': sessionStorage.getItem('JWT')
+            }
+        }).then(res => {
+            this.setState({users: res.data.data});
+        })
         axios.get('/api/events')
         .then(res => {
             this.setState({events: res.data.data});
@@ -67,11 +78,14 @@ class Admin extends Component {
                         <EventList events={this.state.events} />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-6">
-                        <h3>Users</h3>
+                {this.state.user.role === 5 ? (
+                    <div className="row">
+                        <div className="col-6">
+                            <h3>Users</h3>
+                            <UsersList users={this.state.users} />
+                        </div>
                     </div>
-                </div>
+                ): ""}
             </div>
         )
     }

@@ -46,6 +46,16 @@ module.exports = {
             res.json({success: false, data: "Unauthorized"})
         }
     },
+
+    getAll: (req, res) => {
+        query("SELECT users.name as name, roles.name as role FROM users LEFT JOIN roles on roles.id = users.role_id")
+        .then(users => {
+            res.json({success: true, data: users});
+        })
+        .catch(err => {
+            res.json({success: false, data: err});
+        })
+    }
 }
 
 const checkToken = (req) => {
