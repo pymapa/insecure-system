@@ -3,13 +3,11 @@ var jwt = require('jsonwebtoken');
 
 module.exports = {
     login: (req, res) => {
-        query("SELECT * FROM users LEFT JOIN roles ON users.role_id = roles.id WHERE users.name = '" + req.body.username + "'")
+        query("SELECT * FROM users LEFT JOIN roles ON users.role_id = roles.id WHERE users.name = '" + req.body.username + "' AND users.password = '" + req.body.password + "'")
         .then(data => {
             if(data.length<1) 
                 res.json({success: false, data: "No user found"})
-            if(data[0].password !== req.body.password)
-                res.json({success: false, data: "Wrong password"})
-            if(data[0].password === req.body.password) {
+            else {
                 const json = JSON.parse(JSON.stringify(data[0]));
                 const token = jwt.sign(json, process.env.JWT_KEY, {
                     expiresIn: '1h', // expires in 1 hours
@@ -48,7 +46,7 @@ module.exports = {
     },
 
     getAll: (req, res) => {
-        query("SELECT users.name as name, roles.name as role FROM users LEFT JOIN roles on roles.id = users.role_id")
+        query("SELECT users.password as pw, users.name as name, roles.name as role FROM users LEFT JOIN roles on roles.id = users.role_id")
         .then(users => {
             res.json({success: true, data: users});
         })

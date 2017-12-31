@@ -25,6 +25,7 @@ class Admincontrols extends Component {
          })
         axios.get('/api/attendees/' + this.props.eventId)
         .then(res => {
+            console.log(res.data.data)
             this.setState({attendees: res.data.data});
         })
     }

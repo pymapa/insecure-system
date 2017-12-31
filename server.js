@@ -16,7 +16,7 @@ require('dotenv').config();
 // Use REST API
 app.use('/api', require('./api/index'));
 
-
+app.use(express.static('.'));
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/build/index.html'));
